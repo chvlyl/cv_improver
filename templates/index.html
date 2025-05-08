@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Tailor - Customize Your Resume{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">Tailor Your Resume</h2>
+            </div>
+            <div class="card-body">
+                <form action="/process_resume" method="post" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label for="resume_markdown" class="form-label">Your Resume (Markdown Format)</label>
+                        <div class="d-flex justify-content-end mb-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="example-resume-btn">
+                                Load Example Resume
+                            </button>
+                        </div>
+                        <textarea id="resume_markdown" name="resume_markdown" class="form-control" rows="15" required
+                            placeholder="Paste your resume in markdown format here..."></textarea>
+                        <div class="form-text">Paste your resume in markdown format. If you don't have a markdown version, you can use an online converter.</div>
+                        <div class="invalid-feedback">Please provide your resume content.</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="job_link" class="form-label">Job Posting URL</label>
+                        <input type="url" id="job_link" name="job_link" class="form-control" required 
+                            placeholder="https://www.example.com/job-posting">
+                        <div class="form-text">Paste the full URL to the job posting you're applying for.</div>
+                        <div class="invalid-feedback">Please provide a valid job posting URL.</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="loading-spinner"></span>
+                            Customize My Resume
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h3 class="card-title mb-0">About Resume Tailor</h3>
+            </div>
+            <div class="card-body">
+                <p>Resume Tailor uses AI to analyze both your resume and the job description to create:</p>
+                <ul>
+                    <li><strong>A customized resume</strong> that highlights your most relevant experience and skills</li>
+                    <li><strong>Interview preparation materials</strong> with potential questions and talking points</li>
+                </ul>
+                <p>This will significantly increase your chances of landing an interview and succeeding in it.</p>
+                <div class="alert alert-info">
+                    <strong>Note:</strong> Processing may take a few minutes. Please don't close this page while your resume is being tailored.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form.needs-validation');
+        const spinner = document.getElementById('loading-spinner');
+        const submitBtn = document.querySelector('button[type="submit"]');
+        
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                // Show loading state
+                spinner.classList.remove('d-none');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = spinner.outerHTML + ' Processing... (This may take a few minutes)';
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
+{% endblock %} 

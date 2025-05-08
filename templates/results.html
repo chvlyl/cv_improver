@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Your Tailored Resume & Interview Materials{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Your Tailored Results</h2>
+            <a href="/" class="btn btn-outline-primary">Create Another</a>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <ul class="nav nav-tabs" id="resultsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume-tab-pane" type="button" role="tab" aria-controls="resume-tab-pane" aria-selected="true">
+                    Tailored Resume
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="interview-tab" data-bs-toggle="tab" data-bs-target="#interview-tab-pane" type="button" role="tab" aria-controls="interview-tab-pane" aria-selected="false">
+                    Interview Materials
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="resultsTabContent">
+            <!-- Tailored Resume Tab -->
+            <div class="tab-pane fade show active" id="resume-tab-pane" role="tabpanel" aria-labelledby="resume-tab" tabindex="0">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Tailored Resume</h3>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" id="copy-resume-btn">Copy to Clipboard</button>
+                            <button class="btn btn-sm btn-outline-primary" id="download-resume-btn">Download as MD</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="markdown-body p-4" id="tailored-resume-content">
+                            <!-- The resume content will be rendered here by JavaScript -->
+                        </div>
+                        <textarea id="tailored-resume-raw" class="d-none">{{ tailored_resume }}</textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interview Materials Tab -->
+            <div class="tab-pane fade" id="interview-tab-pane" role="tabpanel" aria-labelledby="interview-tab" tabindex="0">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Interview Materials</h3>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" id="copy-interview-btn">Copy to Clipboard</button>
+                            <button class="btn btn-sm btn-outline-primary" id="download-interview-btn">Download as MD</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="markdown-body p-4" id="interview-materials-content">
+                            <!-- The interview materials will be rendered here by JavaScript -->
+                        </div>
+                        <textarea id="interview-materials-raw" class="d-none">{{ interview_materials }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Render markdown content
+        const resumeContent = document.getElementById('tailored-resume-raw').value;
+        const interviewContent = document.getElementById('interview-materials-raw').value;
+        
+        document.getElementById('tailored-resume-content').innerHTML = marked.parse(resumeContent);
+        document.getElementById('interview-materials-content').innerHTML = marked.parse(interviewContent);
+        
+        // Copy to clipboard functionality
+        function copyToClipboard(text, buttonId) {
+            navigator.clipboard.writeText(text).then(() => {
+                const button = document.getElementById(buttonId);
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('btn-success');
+                button.classList.remove('btn-outline-secondary');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-outline-secondary');
+                }, 2000);
+            });
+        }
+        
+        // Download as markdown file
+        function downloadMarkdown(content, filename) {
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Add event listeners for buttons
+        document.getElementById('copy-resume-btn').addEventListener('click', () => {
+            copyToClipboard(resumeContent, 'copy-resume-btn');
+        });
+        
+        document.getElementById('copy-interview-btn').addEventListener('click', () => {
+            copyToClipboard(interviewContent, 'copy-interview-btn');
+        });
+        
+        document.getElementById('download-resume-btn').addEventListener('click', () => {
+            downloadMarkdown(resumeContent, 'tailored_resume.md');
+        });
+        
+        document.getElementById('download-interview-btn').addEventListener('click', () => {
+            downloadMarkdown(interviewContent, 'interview_materials.md');
+        });
+    });
+</script>
+{% endblock %} 

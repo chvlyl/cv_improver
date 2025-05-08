@@ -1,0 +1,27 @@
+[project]
+name = "cv_improver"
+version = "0.1.0"
+description = "cv_improver using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.119.0,<1.0.0",
+    "fastapi>=0.110.0,<1.0.0",
+    "uvicorn>=0.28.0,<1.0.0",
+    "python-multipart>=0.0.9,<1.0.0",
+    "jinja2>=3.1.3,<4.0.0"
+]
+
+[project.scripts]
+cv_improver = "cv_improver.main:run"
+run_crew = "cv_improver.main:run"
+train = "cv_improver.main:train"
+replay = "cv_improver.main:replay"
+test = "cv_improver.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
