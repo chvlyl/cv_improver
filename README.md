@@ -18,6 +18,11 @@ First, if you haven't already, install uv:
 pip install uv
 ```
 
+```
+pip install crewai
+pip install 'crewai[tools]'
+```
+
 Next, navigate to your project directory and install the dependencies:
 
 (Optional) Lock the dependencies and install them by using the CLI command:
@@ -33,8 +38,12 @@ crewai install
 
 To start the web application, run this from the root folder of your project:
 
+```
+source .venv/bin/activate
+```
+
 ```bash
-$ python main.py
+python main.py
 ```
 
 This will start the FastAPI web server on http://0.0.0.0:8000. You can then access the application through your web browser.

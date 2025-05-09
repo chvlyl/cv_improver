@@ -32,6 +32,20 @@
                         <div class="invalid-feedback">Please provide a valid job posting URL.</div>
                     </div>
                     
+                    <div class="mb-4">
+                        <label for="other_information_url" class="form-label">Other Information URL (e.g., GitHub, LinkedIn)</label>
+                        <input type="url" id="other_information_url" name="other_information_url" class="form-control"
+                            placeholder="https://github.com/yourprofile or https://linkedin.com/in/yourprofile">
+                        <div class="form-text">Optional: Provide a URL to your GitHub, LinkedIn, or personal website.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="personal_writeup" class="form-label">Personal Write-up</label>
+                        <textarea id="personal_writeup" name="personal_writeup" class="form-control" rows="5"
+                            placeholder="Briefly describe your key skills, experience, and career goals..."></textarea>
+                        <div class="form-text">Optional: Provide a short paragraph about yourself. This will be used to further tailor your application materials.</div>
+                    </div>
+                    
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="loading-spinner"></span>
@@ -69,6 +83,30 @@
         const form = document.querySelector('form.needs-validation');
         const spinner = document.getElementById('loading-spinner');
         const submitBtn = document.querySelector('button[type="submit"]');
+        const exampleResumeBtn = document.getElementById('example-resume-btn');
+        const resumeTextarea = document.getElementById('resume_markdown');
+        const jobLinkInput = document.getElementById('job_link');
+        const personalWriteupTextarea = document.getElementById('personal_writeup');
+        const otherInfoUrlInput = document.getElementById('other_information_url');
+        
+        exampleResumeBtn.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/get_example_data');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const exampleData = await response.json();
+                
+                resumeTextarea.value = exampleData.resume_markdown || '';
+                jobLinkInput.value = exampleData.job_link || '';
+                personalWriteupTextarea.value = exampleData.personal_writeup || '';
+                otherInfoUrlInput.value = exampleData.other_information_url || '';
+
+            } catch (error) {
+                console.error('Failed to load example data:', error);
+                alert('Failed to load example data. See console for details.');
+            }
+        });
         
         form.addEventListener('submit', function(event) {
             if (!form.checkValidity()) {

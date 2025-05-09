@@ -2,13 +2,15 @@ from src.cv_improver.crew import CvImprover
 import tempfile
 import os
 
-def process_resume_and_job(resume_markdown: str, job_link: str) -> tuple:
+def process_resume_and_job(resume_markdown: str, job_link: str, other_information_url: str, personal_writeup: str) -> tuple:
     """
     Process a user's resume for a specific job and return the tailored resume and interview materials
     
     Args:
         resume_markdown (str): The user's resume in markdown format
         job_link (str): URL of the job posting
+        other_information_url (str): URL for other relevant information (e.g., GitHub, LinkedIn)
+        personal_writeup (str): A brief write-up about the user
     
     Returns:
         tuple: (tailored_resume, interview_materials) both as markdown strings
@@ -22,15 +24,8 @@ def process_resume_and_job(resume_markdown: str, job_link: str) -> tuple:
         # Set up the job application inputs
         job_application_inputs = {
             'job_posting_url': job_link,
-            'github_url': 'https://github.com/joaomdmoura',
-            'personal_writeup': """Noah is an accomplished Software
-            Engineering Leader with 18 years of experience, specializing in
-            managing remote and in-office teams, and expert in multiple
-            programming languages and frameworks. He holds an MBA and a strong
-            background in AI and data science. Noah has successfully led
-            major tech initiatives and startups, proving his ability to drive
-            innovation and growth in the tech industry. Ideal for leadership
-            roles that require a strategic and innovative approach."""
+            'other_information_url': other_information_url,
+            'personal_writeup': personal_writeup
         }
         
         # Process the resume using the CV Improver crew
